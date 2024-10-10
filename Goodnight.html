@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Night Mary Joy</title>
+    <style>
+        /* Reset and Basic Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background-color: #000; /* Deep Black Background */
+            position: relative;
+        }
+
+        /* Background Sound */
+        audio {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            display: none; /* Hide the audio controls */
+        }
+
+        /* Animated Stars */
+        .stars {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Multiple Layers of Stars for Depth */
+        .stars::before, .stars::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: transparent;
+            top: -50%;
+            left: -50%;
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 3px 3px;
+            animation: moveStars 50s linear infinite;
+            opacity: 0.5;
+        }
+
+        .stars::after {
+            background-size: 2px 2px;
+            animation-duration: 100s;
+            opacity: 0.3;
+        }
+
+        @keyframes moveStars {
+            from { transform: translate(0, 0); }
+            to { transform: translate(-100px, -100px); }
+        }
+
+        /* Fog Overlay */
+        .fog {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: rgba(255, 255, 255, 0.05);
+            background-image: radial-gradient(circle at 25%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                              radial-gradient(circle at 75%, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 100px 100px;
+            animation: fogMove 60s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fogMove {
+            from { transform: translate(0, 0); }
+            to { transform: translate(100px, 100px); }
+        }
+
+        /* Moon */
+        .moon {
+            position: absolute;
+            top: 10%;
+            left: 80%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 50% 50%, #ffffff, #f0f0f0 70%, #dcdcdc 90%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.7);
+            z-index: 2;
+            animation: moonMove 20s linear infinite;
+        }
+
+        @keyframes moonMove {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-50px) translateY(20px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        /* Moon Reflection */
+        .moon-reflection {
+            position: absolute;
+            bottom: 200px; /* Height of water */
+            left: 80%;
+            width: 120px;
+            height: 60px; /* Half the height of the moon for reflection */
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5), transparent 70%);
+            border-radius: 50% 50% 0 0;
+            transform: translateY(-100%) rotateX(180deg);
+            opacity: 0.3;
+            z-index: 2;
+            animation: reflectionMove 20s linear infinite;
+        }
+
+        @keyframes reflectionMove {
+            0% { transform: translateY(-100%) rotateX(180deg) scaleY(1); opacity: 0.3; }
+            50% { transform: translateY(-100%) rotateX(180deg) scaleY(1.1); opacity: 0.2; }
+            100% { transform: translateY(-100%) rotateX(180deg) scaleY(1); opacity: 0.3; }
+        }
+
+        /* Good Night Janelle Text */
+        .good-night {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffdddd;
+            font-size: 3em;
+            text-align: center;
+            z-index: 3;
+            animation: flicker 1.5s infinite alternate, shake 0.5s infinite;
+        }
+
+        .good-night span {
+            display: block;
+        }
+
+        /* Heart in Text */
+        .heart {
+            display: inline-block;
+            color: #ff4444;
+            font-size: 1.5em;
+            margin: 0 10px;
+            animation: pulse 1.5s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Flicker Animation */
+        @keyframes flicker {
+            0% { opacity: 1; text-shadow: 0 0 10px #ffdddd, 0 0 20px #ffaaaa, 0 0 30px #ff5555; }
+            50% { opacity: 0.7; text-shadow: 0 0 5px #ffdddd, 0 0 10px #ffaaaa, 0 0 15px #ff5555; }
+            100% { opacity: 1; text-shadow: 0 0 10px #ffdddd, 0 0 20px #ffaaaa, 0 0 30px #ff5555; }
+        }
+
+        /* Shake Animation */
+        @keyframes shake {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-52%, -48%) rotate(-1deg); }
+            50% { transform: translate(-48%, -52%) rotate(1deg); }
+            75% { transform: translate(-51%, -49%) rotate(-1deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+
+        /* Animated Flowers on the Sides */
+        .flowers-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        /* Left and Right Containers */
+        .flowers-left {
+            left: 0;
+        }
+
+        .flowers-right {
+            right: 0;
+        }
+
+        /* Individual Flower Styles */
+        .flower {
+            width: 50px;
+            height: 50px;
+            margin: 20px 0;
+            animation: bloom 4s infinite ease-in-out;
+        }
+
+        /* Different Flower Types Using SVG Backgrounds */
+        .flower.type1 {
+            background-image: url('https://www.svgrepo.com/show/12773/flower.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation-delay: 0s;
+        }
+
+        .flower.type2 {
+            background-image: url('https://www.svgrepo.com/show/31182/rose.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation-delay: 1s;
+        }
+
+        .flower.type3 {
+            background-image: url('https://www.svgrepo.com/show/23390/sunflower.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation-delay: 2s;
+        }
+
+        .flower.type4 {
+            background-image: url('https://www.svgrepo.com/show/18475/tulip.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation-delay: 3s;
+        }
+
+        /* Bloom and Shrink Animation */
+        @keyframes bloom {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Water Layer */
+        .water {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, #0e1d2a, rgba(14, 29, 42, 0.8), rgba(14, 29, 42, 0.6), rgba(14, 29, 42, 0.4));
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Water Ripples */
+        .water::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 11%) 0 0,
+                        radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 11%) 50px 50px;
+            background-size: 100px 100px;
+            animation: ripple 10s linear infinite;
+        }
+
+        @keyframes ripple {
+            from { transform: translate(0, 0); }
+            to { transform: translate(100px, 100px); }
+        }
+
+        /* Moon Reflection on Water */
+        .moon-reflection {
+            position: absolute;
+            bottom: 200px; /* Height of water */
+            left: 80%;
+            width: 120px;
+            height: 60px; /* Half the height of the moon for reflection */
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5), transparent 70%);
+            border-radius: 50% 50% 0 0;
+            transform: translateY(-100%) rotateX(180deg);
+            opacity: 0.3;
+            z-index: 2;
+            animation: reflectionMove 20s linear infinite;
+        }
+
+        @keyframes reflectionMove {
+            0% { transform: translateY(-100%) rotateX(180deg) scaleY(1); opacity: 0.3; }
+            50% { transform: translateY(-100%) rotateX(180deg) scaleY(1.1); opacity: 0.2; }
+            100% { transform: translateY(-100%) rotateX(180deg) scaleY(1); opacity: 0.3; }
+        }
+
+        /* Animated Flowers at the Bottom */
+        .flowers-bottom {
+            position: absolute;
+            bottom: 220px; /* Height of water + some margin */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .flower-bottom {
+            width: 30px;
+            height: 30px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: bloom 3s infinite ease-in-out;
+        }
+
+        .flower-bottom.type1 {
+            background-image: url('https://www.svgrepo.com/show/12773/flower.svg');
+            animation-delay: 0s;
+        }
+
+        .flower-bottom.type2 {
+            background-image: url('https://www.svgrepo.com/show/31182/rose.svg');
+            animation-delay: 1s;
+        }
+
+        .flower-bottom.type3 {
+            background-image: url('https://www.svgrepo.com/show/23390/sunflower.svg');
+            animation-delay: 2s;
+        }
+
+        .flower-bottom.type4 {
+            background-image: url('https://www.svgrepo.com/show/18475/tulip.svg');
+            animation-delay: 3s;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .good-night {
+                font-size: 2em;
+            }
+
+            .moon {
+                width: 80px;
+                height: 80px;
+                left: 70%;
+                top: 5%;
+            }
+
+            .flowers-container {
+                width: 60px;
+            }
+
+            .flower {
+                width: 30px;
+                height: 30px;
+                margin: 10px 0;
+            }
+
+            .flowers-bottom {
+                gap: 10px;
+            }
+
+            .flower-bottom {
+                width: 20px;
+                height: 20px;
+            }
+
+            .water {
+                height: 150px;
+            }
+
+            .moon-reflection {
+                width: 80px;
+                height: 40px;
+                left: 70%;
+            }
+        }
+
+        /* Play Button Overlay */
+        .play-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            display: none; /* Hidden by default */
+        }
+
+        .play-button-overlay.active {
+            display: flex;
+        }
+
+        .play-button {
+            padding: 15px 30px;
+            background-color: #ffffff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .play-button:hover {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Sound -->
+    <audio id="background-audio" autoplay loop>
+        <source src="Moon.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Play Button Overlay (Visible if Autoplay is Blocked) -->
+    <div class="play-button-overlay" id="play-button-overlay">
+        <button class="play-button" id="play-button">Click to Play Sound</button>
+    </div>
+
+    <!-- Stars and Fog -->
+    <div class="stars"></div>
+    <div class="fog"></div>
+
+    <!-- Moon -->
+    <div class="moon"></div>
+
+    <!-- Moon Reflection -->
+    <div class="moon-reflection"></div>
+
+    <!-- Good Night Janelle Text with Heart -->
+    <div class="good-night">
+        <span>Good Night</span>
+        <span class="heart">❤️</span>
+        <span>Mary Joy</span>
+    </div>
+
+    <!-- Water Layer -->
+    <div class="water"></div>
+
+    <!-- Animated Flowers on the Left Side -->
+    <div class="flowers-container flowers-left">
+        <div class="flower type1"></div>
+        <div class="flower type2"></div>
+        <div class="flower type3"></div>
+        <div class="flower type4"></div>
+    </div>
+
+    <!-- Animated Flowers on the Right Side -->
+    <div class="flowers-container flowers-right">
+        <div class="flower type1"></div>
+        <div class="flower type2"></div>
+        <div class="flower type3"></div>
+        <div class="flower type4"></div>
+    </div>
+
+    <!-- Animated Flowers at the Bottom -->
+    <div class="flowers-bottom">
+        <div class="flower-bottom type1"></div>
+        <div class="flower-bottom type2"></div>
+        <div class="flower-bottom type3"></div>
+        <div class="flower-bottom type4"></div>
+    </div>
+
+    <!-- Optional JavaScript for Additional Interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('background-audio');
+            const playButtonOverlay = document.getElementById('play-button-overlay');
+            const playButton = document.getElementById('play-button');
+
+            // Attempt to play the audio
+            const playAudio = () => {
+                audio.play().then(() => {
+                    // Autoplay started successfully
+                    playButtonOverlay.style.display = 'none';
+                }).catch((error) => {
+                    // Autoplay was prevented
+                    console.warn('Autoplay was prevented. Showing play button.');
+                    playButtonOverlay.classList.add('active');
+                });
+            };
+
+            playAudio();
+
+            // If autoplay is blocked, allow the user to start the audio
+            playButton.addEventListener('click', () => {
+                audio.play().then(() => {
+                    playButtonOverlay.style.display = 'none';
+                }).catch((error) => {
+                    console.error('Audio playback failed:', error);
+                });
+            });
+
+            // Optional: Toggle play/pause when clicking on the audio (hidden)
+            audio.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
